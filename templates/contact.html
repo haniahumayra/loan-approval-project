@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us — LoanCalc AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <nav id="navbar" class="scrolled">
+        <div class="container">
+            <a href="/" class="brand">
+                <div class="brand-icon">L</div>
+                <span>LoanCalc AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#predict">Predict</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero" style="min-height: 50vh; padding-top: 140px;">
+        <div class="container">
+            <div class="hero-content" style="text-align: center; margin: 0 auto;">
+                <span class="tagline">Get in Touch</span>
+                <h1>We'd love to hear from <span>you</span></h1>
+                <p style="margin: 0 auto 40px;">Have questions about our technology or suggestions for improvement? Reach out to our team anytime.</p>
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <div class="container">
+            <div class="form-card" style="max-width: 800px; margin: 0 auto;">
+                <div class="hero-layout" style="grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <div>
+                        <h2 style="font-size: 28px; margin-bottom: 20px; color: var(--p-dark);">Send us a Message</h2>
+                        <form action="#" method="POST">
+                            <div class="input-field" style="margin-bottom: 20px;">
+                                <label>Name</label>
+                                <input type="text" placeholder="Your Name">
+                            </div>
+                            <div class="input-field" style="margin-bottom: 20px;">
+                                <label>Email</label>
+                                <input type="email" placeholder="your@email.com">
+                            </div>
+                            <div class="input-field" style="margin-bottom: 30px;">
+                                <label>Message</label>
+                                <textarea style="padding: 16px 20px; border-radius: 14px; border: 1px solid var(--border); background: #fafafa; font-family: inherit; font-size: 15px; outline: none; min-height: 120px; width: 100%;" placeholder="How can we help?"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" style="width: 100%;">Send Message</button>
+                        </form>
+                    </div>
+                    <div style="background: var(--p-dark); padding: 40px; border-radius: 24px; color: var(--white);">
+                        <h3 style="color: var(--gold); margin-bottom: 30px;">Contact Information</h3>
+                        <div style="margin-bottom: 20px;">
+                            <p style="font-weight: 600; color: var(--gold-light);">Email</p>
+                            <p>support@loancalcai.co</p>
+                        </div>
+                        <div style="margin-bottom: 20px;">
+                            <p style="font-weight: 600; color: var(--gold-light);">Location</p>
+                            <p>Fintech Hub, Level 4<br>San Francisco, CA</p>
+                        </div>
+                        <div style="margin-top: 40px;">
+                            <p style="font-weight: 600; color: var(--gold-light);">Working Hours</p>
+                            <p>Mon - Fri: 9:00 - 17:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 100px 0 40px; border-top: 1px solid var(--border);">
+        <div class="container" style="text-align: center;">
+            <div class="brand" style="justify-content: center; margin-bottom: 30px;">
+                <div class="brand-icon">L</div>
+                <span>LoanCalc AI</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted);">© 2026 LoanCalc AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

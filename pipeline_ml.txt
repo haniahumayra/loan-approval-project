@@ -1,0 +1,118 @@
+================================================================================
+TECHNICAL DOCUMENTATION: LOAN APPROVAL PREDICTION PIPELINE
+================================================================================
+
+1. PROJECT OVERVIEW
+--------------------------------------------------------------------------------
+Sistem ini dirancang untuk memprediksi kelayakan pinjaman (Loan Approval) secara 
+otomatis menggunakan algoritma Machine Learning. Model menganalisis profil 
+keuangan dan aset pemohon untuk memberikan keputusan instan.
+
+2. DATASET INFORMATION
+--------------------------------------------------------------------------------
+- Sumber: Loan Approval Prediction Dataset (Kaggle).
+- Ukuran: 4,269 baris data.
+- Fitur (Input):
+    * no_of_dependents (Jumlah Tanggungan)
+    * education (Pendidikan: Graduate/Not Graduate)
+    * self_employed (Pekerjaan: Yes/No)
+    * income_annum (Pendapatan Tahunan)
+    * loan_amount (Jumlah Pinjaman)
+    * loan_term (Tenor Pinjaman)
+    * cibil_score (Skor Kredit - mapping dari SLIK)
+    * residential_assets_value (Aset Residensial)
+    * commercial_assets_value (Aset Komersial)
+    * luxury_assets_value (Aset Mewah)
+    * bank_asset_value (Aset Bank)
+- Target (Output): loan_status (Approved / Rejected)
+
+3. PREPROCESSING STEPS (THE PIPELINE)
+--------------------------------------------------------------------------------
+Sebelum masuk ke model, data diproses melalui Scikit-Learn Pipeline:
+a. Handling Missing Values: Menggunakan SimpleImputer (Strategy: Median untuk 
+   angka, Most Frequent untuk kategori).
+b. Categorical Encoding: Menggunakan OrdinalEncoder untuk fitur Pendidikan dan 
+   Pekerjaan agar bisa dipahami oleh algoritma.
+c. Feature Scaling: Menggunakan StandardScaler untuk menstandarisasi skala 
+   angka (seperti pendapatan dan nilai aset) agar model lebih stabil.
+
+4. MODEL EVALUATION & PERFORMANCE
+--------------------------------------------------------------------------------
+Beberapa model diuji menggunakan Cross-Validation (5-Folds). Berikut hasilnya:
+
+| Model                | Accuracy | F1-Score | ROC-AUC |
+|----------------------|----------|----------|---------|
+| Gradient Boosting    | 98.71%   | 0.9897   | 0.9983  |
+| XGBoost              | 98.48%   | 0.9878   | 0.9982  |
+| Random Forest        | 98.01%   | 0.9840   | 0.9986  |
+| SVM                  | 94.61%   | 0.9567   | 0.9883  |
+| Logistic Regression  | 91.22%   | 0.9302   | 0.9726  |
+
+*Pemenang: Gradient Boosting dipilih sebagai model akhir karena memiliki 
+keseimbangan terbaik antara Accuracy dan F1-Score.*
+
+5. IMPLEMENTATION ARCHITECTURE
+--------------------------------------------------------------------------------
+- Serialization: Model dan seluruh pipeline preprocessing disimpan dalam format 
+  Pickle (.pkl) untuk menjamin data yang diprediksi di web diproses dengan 
+  metode yang sama persis saat training.
+- Integration: Flask Backend (app.py) memuat model tersebut dan melakukan 
+  inferensi secara real-time.
+- SLIK Mapping: Input Kolektibilitas (1-5) dari user secara otomatis dipetakan 
+  ke nilai CIBIL Score sebelum diproses oleh model.
+
+6. FEATURE IMPORTANCE & CORRELATION
+--------------------------------------------------------------------------------
+Berdasarkan analisis data, fitur yang memiliki pengaruh paling signifikan 
+terhadap keputusan pinjaman adalah:
+
+a. CIBIL Score (SLIK Category): Ini adalah prediktor terkuat. Skor kredit yang 
+   baik (Kol 1 & 2) memiliki korelasi positif yang sangat tinggi dengan 
+   persetujuan pinjaman.
+b. Income vs Loan Amount: Model melihat hubungan antara pendapatan tahunan 
+   dengan jumlah pinjaman yang diajukan. Korelasi antara Income Annum dan 
+   Luxury Assets juga sangat kuat (0.93), menunjukkan profil kekayaan pemohon.
+c. Loan Term: Jangka waktu pinjaman juga menjadi pertimbangan penting dalam 
+   menentukan risiko gagal bayar.
+
+8. HEURISTIK & POLA YANG DIPELAJARI MODEL
+--------------------------------------------------------------------------------
+Meskipun model bekerja dengan matematika kompleks, secara intuitif model 
+mempelajari beberapa "aturan praktis" (Heuristics) dari data:
+
+a. Batas Aman Skor Kredit: Model cenderung memberikan persetujuan (Approved) 
+   secara otomatis jika CIBIL Score berada di atas 600 (Kategori Kol 1 & 2), 
+   selama jumlah pinjaman masih masuk akal dibanding aset.
+b. Asset Coverage Ratio: Model mempelajari pola di mana total nilai aset 
+   (Residensial + Komersial + Mewah + Bank) sebaiknya lebih besar atau 
+   setara dengan jumlah pinjaman yang diajukan. Jika aset jauh di bawah 
+   pinjaman, risiko penolakan (Rejected) meningkat.
+c. Rasio Pendapatan vs Cicilan: Meskipun tidak ada rumus eksplisit, model 
+   secara implisit menghitung apakah 'Income Annum' cukup untuk menutupi 
+   beban pinjaman dalam durasi 'Loan Term' yang dipilih.
+d. Penanganan Status Kol 3 (Kurang Lancar): Dengan memetakan Kol 3 ke skor 550, 
+   sistem menciptakan kondisi "Borderline". Di titik ini, model AI tidak 
+   langsung menyetujui secara otomatis, melainkan sangat bergantung pada 
+   kekuatan fitur lain (aset dan pendapatan) untuk keputusan akhir.
+e. Dampak Tenor: Pinjaman dengan tenor sangat panjang (misal: 20 tahun) 
+   dianggap memiliki risiko ketidakpastian yang lebih tinggi jika tidak 
+   dibarengi dengan profil aset yang kuat.
+
+9. MENGAPA MODEL INI SANGAT AKURAT (~98%)?
+--------------------------------------------------------------------------------
+Ada beberapa alasan teknis mengapa evaluasi model mencapai angka yang sangat tinggi:
+
+a. Algoritma Ensemble (Boosting): Gradient Boosting bekerja dengan cara membangun 
+   tree secara berurutan di mana setiap tree baru mencoba memperbaiki kesalahan 
+   dari tree sebelumnya. Ini sangat efektif untuk data terstruktur seperti ini.
+b. Kualitas Fitur Skor Kredit: CIBIL Score adalah fitur "golden" dalam domain 
+   finansial. Karena fitur ini tersedia dan akurat dalam dataset, model dapat 
+   membedakan antara pemohon yang berisiko dan tidak dengan sangat jelas.
+c. Preprocessing yang Tepat: Penggunaan OrdinalEncoder pada pendidikan dan 
+   StandardScaler pada data numerik memastikan tidak ada fitur yang mendominasi 
+   karena perbedaan skala angka (misal: membandingkan 'jumlah tanggungan' yang 
+   kecil dengan 'pendapatan' yang jutaan).
+
+================================================================================
+Dokumen ini disusun untuk kebutuhan penjelasan teknis akademik.
+================================================================================

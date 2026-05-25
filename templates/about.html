@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — LoanCalc AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <nav id="navbar" class="scrolled">
+        <div class="container">
+            <a href="/" class="brand">
+                <div class="brand-icon">L</div>
+                <span>LoanCalc AI</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/#predict">Predict</a>
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero" style="min-height: 60vh; padding-top: 140px;">
+        <div class="container">
+            <div class="hero-content" style="text-align: center; margin: 0 auto;">
+                <span class="tagline">Our Story</span>
+                <h1>Financial Clarity Through <span>Intelligence</span></h1>
+                <p style="margin: 0 auto 40px;">We believe that everyone deserves access to smart financial insights. Our mission is to simplify the loan process using state-of-the-art AI technology.</p>
+            </div>
+        </div>
+    </header>
+
+    <section>
+        <div class="container">
+            <div class="form-card">
+                <div class="hero-layout" style="grid-template-columns: 1fr 1fr; gap: 40px;">
+                    <div>
+                        <h2 style="font-size: 32px; margin-bottom: 20px; color: var(--p-dark);">Why Choose Us?</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 20px;">LoanCalc AI uses a sophisticated machine learning pipeline to analyze variables like income, assets, and credit scores. Unlike traditional calculators, our model simulates real-world banking logic.</p>
+                        <p style="color: var(--text-muted);">Our goal is to reduce the ambiguity in financial applications and empower users with data-driven confidence.</p>
+                    </div>
+                    <div style="background: var(--off-white); padding: 30px; border-radius: 20px; border: 1px solid var(--border);">
+                        <h3 style="margin-bottom: 15px; color: var(--gold);">Our Technology</h3>
+                        <ul style="list-style: none; color: var(--text-muted);">
+                            <li style="margin-bottom: 10px;">✔ Gradient Boosting Classifiers</li>
+                            <li style="margin-bottom: 10px;">✔ Automated Feature Engineering</li>
+                            <li style="margin-bottom: 10px;">✔ Real-time Risk Assessment</li>
+                            <li style="margin-bottom: 10px;">✔ Secure Data Processing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 100px 0 40px; border-top: 1px solid var(--border);">
+        <div class="container" style="text-align: center;">
+            <div class="brand" style="justify-content: center; margin-bottom: 30px;">
+                <div class="brand-icon">L</div>
+                <span>LoanCalc AI</span>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted);">© 2026 LoanCalc AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
