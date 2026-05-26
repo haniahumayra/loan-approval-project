@@ -55,7 +55,7 @@
             </div>
 
             <div class="form-card">
-                <form method="POST" action="/predict#predict" id="loanForm">
+               <form method="POST" action="/predict#predict" id="loanForm" onsubmit="return cleanBeforeSubmit()">
                     <div class="form-grid">
                         <div class="input-field">
                             <label>Tingkat Pendidikan</label>
@@ -77,11 +77,11 @@
                         </div>
                         <div class="input-field">
                             <label>Pendapatan Tahunan</label>
-                            <input type="number" name="income_annum" step="any" placeholder="total pendapatan per tahun" value="{{ inputs.income_annum if inputs else '' }}">
+                            <input type="text" name="income_annum" placeholder="total pendapatan per tahun" value="{{ inputs.income_annum if inputs else '' }}">
                         </div>
                         <div class="input-field">
                             <label>Jumlah Pinjaman Diajukan</label>
-                            <input type="number" name="loan_amount" step="any" placeholder="jumlah pinjaman yang diajukan" value="{{ inputs.loan_amount if inputs else '' }}">
+                            <input type="text" name="loan_amount" placeholder="jumlah pinjaman yang diajukan" value="{{ inputs.loan_amount if inputs else '' }}">
                         </div>
                         <div class="input-field">
                             <label>Tenor Pinjaman (Bulan)</label>
@@ -100,19 +100,19 @@
                         </div>
                         <div class="input-field">
                             <label>Aset Residensial</label>
-                            <input type="number" name="residential_assets_value" step="any" placeholder="nilai properti tempat tinggal" value="{{ inputs.residential_assets_value if inputs else '' }}">
+                            <input type="text" name="residential_assets_value" placeholder="nilai properti tempat tinggal" value="{{ inputs.residential_assets_value if inputs else '' }}">
                         </div>
                         <div class="input-field">
                             <label>Aset Komersial</label>
-                            <input type="number" name="commercial_assets_value" step="any" placeholder="nilai properti bisnis" value="{{ inputs.commercial_assets_value if inputs else '' }}">
+                            <input type="text" name="commercial_assets_value" placeholder="nilai properti bisnis" value="{{ inputs.commercial_assets_value if inputs else '' }}">
                         </div>
                         <div class="input-field">
                             <label>Aset Mewah</label>
-                            <input type="number" name="luxury_assets_value" step="any" placeholder="nilai kendaraan, perhiasan, dll" value="{{ inputs.luxury_assets_value if inputs else '' }}">
+                            <input type="text" name="luxury_assets_value" placeholder="nilai kendaraan, perhiasan, dll" value="{{ inputs.luxury_assets_value if inputs else '' }}">
                         </div>
                         <div class="input-field form-full">
                             <label>Nilai Aset Bank</label>
-                            <input type="number" name="bank_asset_value" step="any" placeholder="saldo bank saat ini" value="{{ inputs.bank_asset_value if inputs else '' }}">
+                            <input type="text" name="bank_asset_value" placeholder="saldo bank saat ini" value="{{ inputs.bank_asset_value if inputs else '' }}">
                         </div>
 
                         <div class="form-actions">
@@ -127,7 +127,7 @@
                     <h3>Status Pinjaman: <span class="{{ 'text-gold' if prediction == 'Disetujui' else 'text-p-mid' }}">{{ prediction }}</span></h3>
 
                       <p style="font-size: 14px; opacity: 0.75; margin-top: 4px;">Keyakinan Model: <strong>{{ confidence }}%</strong></p>
-                      
+
                     <p>{{ 'Selamat! Profil Anda memenuhi kriteria berbasis AI kami untuk disetujui.' if prediction == 'Disetujui' else 'Sayangnya, profil Anda belum memenuhi kriteria saat ini untuk disetujui.' }}</p>
                 </div>
                 {% endif %}
@@ -289,6 +289,14 @@
                 document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
             });
         });
+        function cleanBeforeSubmit() {
+            ['income_annum', 'loan_amount', 'residential_assets_value', 
+             'commercial_assets_value', 'luxury_assets_value', 'bank_asset_value'].forEach(name => {
+                let input = document.querySelector(`[name="${name}"]`);
+                if (input) input.value = input.value.replace(/\./g, '');
+            });
+            return true;
+        }
     </script>
 
 </body>

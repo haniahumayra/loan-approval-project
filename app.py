@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 import pickle
 import pandas as pd
 import traceback
@@ -6,6 +6,9 @@ import traceback
 app = Flask(__name__)
 
 model = pickle.load(open('loan_pipeline.pkl', 'rb'))
+
+def clean_number(val):
+    return float(str(val).replace('.', '').replace(',', ''))
 
 def slik_to_cibil(slik_category):
     mapping = {
@@ -15,7 +18,7 @@ def slik_to_cibil(slik_category):
         'Kol 4': 450,
         'Kol 5': 350
     }
-    return mapping.get(slik_category, 600)  # Default to 600 if not found
+    return mapping.get(slik_category, 600)
 
 @app.route('/')
 def home():
@@ -24,7 +27,6 @@ def home():
 @app.route('/about')
 def about():
     return render_template('about.html')
-
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -35,18 +37,18 @@ def predict():
             'no_of_dependents': int(data.get('no_of_dependents')),
             'education': data.get('education'),
             'self_employed': data.get('self_employed'),
-            'income_annum': float(data.get('income_annum')),
-            'loan_amount': float(data.get('loan_amount')),
+            'income_annum': clean_number(data.get('income_annum')),
+            'loan_amount': clean_number(data.get('loan_amount')),
             'loan_term': float(data.get('loan_term')),
             'cibil_score': float(slik_to_cibil(data.get('slik_category'))),
-            'residential_assets_value': float(data.get('residential_assets_value')),
-            'commercial_assets_value': float(data.get('commercial_assets_value')),
-            'luxury_assets_value': float(data.get('luxury_assets_value')),
-            'bank_asset_value': float(data.get('bank_asset_value'))
+            'residential_assets_value': clean_number(data.get('residential_assets_value')),
+            'commercial_assets_value': clean_number(data.get('commercial_assets_value')),
+            'luxury_assets_value': clean_number(data.get('luxury_assets_value')),
+            'bank_asset_value': clean_number(data.get('bank_asset_value'))
         }])
 
         prediction = model.predict(input_df)[0]
-        proba = model.predict_proba(input_df)[0] 
+        proba = model.predict_proba(input_df)[0]
 
         confidence = round(proba[1] * 100, 1)
 
@@ -54,7 +56,7 @@ def predict():
             result_text = "Disetujui"
         else:
             result_text = "Ditolak"
-            confidence = round(proba[0] * 100, 1) 
+            confidence = round(proba[0] * 100, 1)
 
         return render_template('index.html', prediction=result_text, confidence=confidence, inputs=data)
 
@@ -62,7 +64,6 @@ def predict():
         print("ERROR:", e)
         print(traceback.format_exc())
         return render_template('index.html', prediction="Error", inputs=request.form)
-    
+
 if __name__ == '__main__':
     app.run(debug=True)
-    
