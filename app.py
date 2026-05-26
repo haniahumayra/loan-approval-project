@@ -46,16 +46,17 @@ def predict():
         }])
 
         prediction = model.predict(input_df)[0]
+        proba = model.predict_proba(input_df)[0] 
 
-        print("RAW PREDICTION:", prediction)
-        print("TYPE:", type(prediction))
+        confidence = round(proba[1] * 100, 1)
 
         if prediction == 1 or str(prediction).lower() == "approved":
             result_text = "Disetujui"
         else:
             result_text = "Ditolak"
+            confidence = round(proba[0] * 100, 1) 
 
-        return render_template('index.html', prediction=result_text, inputs=data)
+        return render_template('index.html', prediction=result_text, confidence=confidence, inputs=data)
 
     except Exception as e:
         print("ERROR:", e)
