@@ -126,8 +126,6 @@
                 <div class="result-box {{ 'approved' if prediction == 'Disetujui' else 'rejected' }}" id="resultArea">
                     <h3>Status Pinjaman: <span class="{{ 'text-gold' if prediction == 'Disetujui' else 'text-p-mid' }}">{{ prediction }}</span></h3>
 
-                      <p style="font-size: 14px; opacity: 0.75; margin-top: 4px;">Keyakinan Model: <strong>{{ confidence }}%</strong></p>
-
                     <p>{{ 'Selamat! Profil Anda memenuhi kriteria berbasis AI kami untuk disetujui.' if prediction == 'Disetujui' else 'Sayangnya, profil Anda belum memenuhi kriteria saat ini untuk disetujui.' }}</p>
                 </div>
                 {% endif %}
