@@ -64,4 +64,4 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
-# Trigger Vercel rebuild
+# Trigger Vercel rebuild 2
