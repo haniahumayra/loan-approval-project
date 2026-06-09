@@ -109,6 +109,13 @@ nav .container {
     box-shadow: 0 4px 10px rgba(45, 11, 43, 0.2);
 }
 
+.brand-logo {
+    height: 220px;
+    width: auto;
+    object-fit: contain;
+    transform: translateY(8px);
+}
+
 .nav-links {
     display: flex;
     gap: 40px;
