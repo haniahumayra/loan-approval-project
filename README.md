@@ -1,4 +1,4 @@
-# Group 7 — LoanCalc AI: Loan Approval Prediction Web App
+# Group 2 — LoanCalc AI: Loan Approval Prediction Web App
 
 A **Flask**-based web application that predicts loan approval eligibility in *real-time* using machine learning. This project compares several classification algorithms and deploys the best-performing **Gradient Boosting Classifier** packaged within a full preprocessing pipeline.
 
